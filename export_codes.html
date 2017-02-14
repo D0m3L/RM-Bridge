@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<meta charset="UTF-8">
+    <title>RM Bridge - Export Codes</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/export.js"></script>
+
+</head>
+
+<body ng-app="app">
+    <a href="index.html"><div style="background: #6d85a7; text-align: center"><img src="images/title.png" /></div></a>
+    <div id="header">
+        <h2>RM Bridge - Export Codes</h2>
+        <p>
+            Use this page to export all code shortcuts form the RM Bridge.
+        </p>
+    </div>
+    <div id="content">
+    <div ng-controller="RMController" id="RMController">     
+        <div ng-show="working == true || error_message != undefined" class ="status_output">
+            <img ng-show="working == true" src="images/rm_bridge_loader.gif" style="float: right;"/>
+            <div ng-show="error_message != undefined" style="color: red; float: right">{{error_message}}</div>
+        </div>
+        <h3>Step 1: Set RM Bridge Address</h3>
+        <p>Enter the address displayed by the <i>Android RM Bridge</i> app and press the <i><b>Export Codes</b></i> button.</p>
+        <div>
+        http:// <input ng-model="bridge_ip" /> : <input ng-model="bridge_port" size="3"/>
+        </div>
+        <p>
+        <button class="button" ng-click="setBridgeHost();loadCodes()">Export Codes</button>
+        </p>
+        <p><hr/></p>
+        <h3>Step 2: Exported Codes</h3>
+        <p>
+            The resulting JSON string can than be imported by using the <a href="import_codes.html">Import Codes</a> page.
+        </p>
+        <p>
+            <textarea style="width: 90%" rows="20">{{ codes_json }}</textarea>
+        </p>
+    </div>
+    </div>
+    <script>
+        init();
+    </script>
+    
+</body>
+
+</html>

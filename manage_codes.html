@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+	<meta charset="UTF-8">
+    <title>RM Bridge - Manage Codes</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/manage.js"></script>
+
+</head>
+
+<body ng-app="app">
+    <a href="index.html"><div style="background: #6d85a7; text-align: center"><img src="images/title.png" /></div></a>
+    <div id="header">
+        <h2>RM Bridge - Manage Codes</h2>
+        <p>
+            Use this page to manage code shortcuts stored on a RM Bridge.
+        </p>
+    </div>
+    <div id="content">
+    <div ng-controller="RMController" id="RMController">
+        <div ng-show="working == true || error_message != undefined" class ="status_output">
+            <img ng-show="working == true" src="images/rm_bridge_loader.gif" style="float: right;"/>
+            <div ng-show="error_message != undefined" style="color: red; float: right">{{error_message}}</div>
+        </div>
+        <h3>Step 1: Set RM Bridge Address</h3>
+        <p>Enter the address displayed by the <i>Android RM Bridge</i> app and press the <i><b>Load Codes</b></i> button.</p>
+        <div>
+        http:// <input ng-model="bridge_ip" /> : <input ng-model="bridge_port" size="3"/>
+        </div>
+        <p>
+        <button class="button" ng-click="setBridgeHost();loadCodes()">Load Codes</button>
+        </p>
+        <p><hr/></p>
+        <h3>Step 2: Review Codes</h3>
+        <p>
+        <table>
+        <thead>
+        <tr>
+            <th style="min-width: 80px;">Name</th>
+            <th style="min-width: 80px;">MAC Address</th>
+            <th style="min-width: 80px;">URL</th>
+            <th style="width:20px; background: white;"> </th>
+            <th style="width:20px; background: white;"> </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="code in codes">
+            <td>{{ code.name }}</td>
+            <td><small>{{ code.mac }}</small></td>
+            <td><a href="{{ code.url }}" target="code_{{ code.name }}"><small>{{ code.url }}</small></a></td>
+            <td><a ng-click="sendCode(code.name)" class="button" style="margin-left: 3em;">test</a></td>
+            <td><a ng-click="deleteCode(code.name)" class="button">delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+        </p>
+        <button class="button" ng-click="deleteCode('*')">Delete all Codes</button>
+        </div>
+
+    <script>
+        init();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <title>RM Bridge - Code Learning</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <script src="js/angular.min.js"></script>
+    <script src="js/learn.js"></script>
+</head>
+
+<body ng-app="app">
+    <a href="index.html">
+        <div style="background: #6d85a7; text-align: center"><img src="images/title.png" /></div>
+    </a>
+    <div id="header">
+        <h2>RM Bridge - Code Learning</h2>
+        <p>
+            Learn codes to use with RM Bridge.
+            <br/> By providing a name code shortcuts can be stored on the bridge.
+        </p>
+    </div>
+    <div id="content">
+        <div ng-controller="RMController" id="RMController">
+            <div ng-show="working == true || error_message != undefined" class="status_output">
+                <img ng-show="working == true" src="images/rm_bridge_loader.gif" style="float: right;" />
+                <div ng-show="error_message != undefined" style="color: red; float: right">{{error_message}}</div>
+            </div>
+            <h3>Step 1: Set RM Bridge Address</h3>
+            <p>Enter the address displayed by the <i>Android RM Bridge</i> app and press the <i><b>Load Devices</b></i> button.</p>
+            <div>
+                http://
+                <input ng-model="bridge_ip" /> :
+                <input ng-model="bridge_port" size="3" />
+            </div>
+            <p>
+                <button class="button" ng-click="setBridgeHost();reLoadDevices()">Load Devices</button>
+            </p>
+
+            <div ng-show="manually_register === true">
+                Optionally a device can be registered manually.
+                <br/>Insert device MAC address, name and type and press the <i><b>Add Manually</b></i> button. </p>
+                <p>Name:
+                    <input ng-model="register_name" /> MAC:
+                    <input ng-model="register_mac" placeholder="00:00:00:00:00:00" /> Type:
+                    <input ng-model="register_type" placeholder="RM2" />
+
+                    <p>
+                        <button class="button" ng-click="setBridgeHost();registerDevice()">Add Manually</button>
+                    </p>
+                </p>
+            </div>
+
+            <p>
+                <hr/>
+            </p>
+            <h3>Step 2: Select RM BroadLink Device</h3>
+            <p>Select the device to use to record codes.</p>
+            <p ng-show="device != undefined">
+                Selected: {{ device.name }} (<small>{{ device.mac }}</small>)
+            </p>
+            <div>
+                Device:
+                <select class="button" data-ng-model="device" data-ng-options="dev.name for dev in devices.list">
+                </select>
+            </div>
+            <p>
+                <hr/>
+            </p>
+            <h3>Step 3: Learn Code</h3>
+            <div ng-show="device.type == '10026'">
+                If learning RF codes, <b>RM Pro+</b> devices must do a frequency scan before learning a code.
+                <br> Press the <i><b>Frequency Scan</b></i> and then long press the button on your remote for approx. 5 seconds.
+                <br> During this process the LED should light up and stay lit even after the scan is complete.
+                <br>
+                <p>
+                    <button class="button" ng-click="freqScan()">Frequency Scan</button>
+                    <!-- <button class="button" ng-click="freqScanCancel()">Cancel Scan</button> -->
+                </p>
+            </div>
+            <p>Press the <i><b>Learn Code</b></i> button and press the button on your remote.
+                <br/>To create a shortcut URL, specify the <i>Code Name</i>.
+                <br/>
+                <br/>After successful learning, you can test the code in the next step.
+                <br/>Note: The timeout for learning is 5 seconds.
+                <p>
+                    Code Name:
+                    <input ng-model="code_name" /> <small>* optional</small>
+                </p>
+            </p>
+
+            <button class="button" ng-click="learnCode()">Learn Code</button>
+            <p>
+                <hr/>
+            </p>
+            <div ng-show="code != undefined">
+                <h3>Step 4: Test the Result</h3>
+                <p>Test the code by pressing the <i><b>Test Code</b></i> button.
+                    <br/> If the code is working, you can copy it for later use.
+                    <br/> To learn another code, press the <i><b>Learn Code</b></i> button of <i>Step 3</i> again.
+                </p>
+
+                <a class="button" ng-href="{{code_test}}" target="test_out">Test Code</a>
+                <div>
+                    <p ng-show="shortcut_url != undefined">Shortcut URL:
+                        <br/>
+                        <input class="output" ng-model="shortcut_url" style="width: 50%" />
+                    </p>
+                    <p>Plain Command:
+                        <br/>
+                        <input class="output" ng-model="command_plain" style="width: 90%" />
+                    </p>
+                    <p>Command URL:
+                        <br/>
+                        <input class="output" ng-model="command_url" style="width: 90%" />
+                    </p>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <iframe name="test_out" style="display: none"></iframe>
+
+    <script>
+        init();
+    </script>
+
+</body>
+
+</html>
